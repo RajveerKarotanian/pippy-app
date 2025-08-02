@@ -1,25 +1,29 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Pippy",
+  "name": "Pippy - Schizophrenia Companion Chatbot",
+  "description": "A friendly penguin companion chatbot for schizophrenia support",
   "icons": [
     {
-      "src": "favicon.ico",
+      "src": "pippy_closed.png",
       "sizes": "64x64 32x32 24x24 16x16",
-      "type": "image/x-icon"
+      "type": "image/png"
     },
     {
-      "src": "logo192.png",
+      "src": "pippy_closed.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "logo512.png",
+      "src": "pippy_closed.png",
       "type": "image/png",
       "sizes": "512x512"
     }
   ],
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "theme_color": "#4A90E2",
+  "background_color": "#F5F7FA",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "en"
 }
