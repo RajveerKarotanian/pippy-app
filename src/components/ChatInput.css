@@ -35,17 +35,20 @@
   border: none;
   outline: none;
   background: transparent;
-  font-size: 0.95rem;
   padding: 0.5rem 0.75rem;
   color: #2C3E50;
-  /* Prevent zoom on mobile */
-  font-size: 16px;
+  /* Prevent zoom on mobile - MUST be 16px or larger */
+  font-size: 16px !important;
   /* Ensure proper textarea behavior */
   line-height: 1.4;
   font-family: inherit;
   /* Remove default textarea styling */
   resize: none;
   overflow: hidden;
+  /* Additional zoom prevention */
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 .chat-input.dark {
@@ -221,11 +224,17 @@
 @media (max-width: 768px) {
   .chat-input {
     font-size: 16px !important; /* Force 16px to prevent zoom */
+    -webkit-text-size-adjust: 100% !important;
+    -ms-text-size-adjust: 100% !important;
+    text-size-adjust: 100% !important;
   }
   
   /* Prevent zoom on input focus */
   input, textarea, select {
     font-size: 16px !important;
+    -webkit-text-size-adjust: 100% !important;
+    -ms-text-size-adjust: 100% !important;
+    text-size-adjust: 100% !important;
   }
   
   /* Ensure proper touch targets */

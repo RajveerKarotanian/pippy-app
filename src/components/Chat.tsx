@@ -172,42 +172,52 @@ const Chat: React.FC<ChatProps> = ({ isDarkMode, onToggleDarkMode }) => {
     }
   };
 
-  // Toggle voice listening with iPhone/iOS compatibility
+  // Toggle voice listening with improved mobile compatibility
   const toggleVoiceListening = async () => {
     if (chatState.isListening) {
       audioService.current.stopListening();
       setChatState(prev => ({ ...prev, isListening: false }));
     } else {
-      // Request microphone permission on iOS
-      if (navigator.userAgent.includes('iPhone') || navigator.userAgent.includes('iPad')) {
-        try {
-          // Request microphone permission explicitly
-          const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-          stream.getTracks().forEach(track => track.stop()); // Stop the stream immediately
-          console.log('Microphone permission granted on iOS');
-        } catch (error) {
-          console.error('Microphone permission denied:', error);
-          alert('Please allow microphone access in your browser settings to use voice input.');
-          return;
-        }
-      }
-      
-      audioService.current.startListening(
-        handleVoiceInput,
-        (error) => {
-          console.error('Voice recognition error:', error);
-          // Show user-friendly error message
-          if (error.includes('denied')) {
-            alert('Microphone access denied. Please allow microphone access in your browser settings.');
-          } else if (error.includes('no-speech')) {
-            // Don't show alert for no-speech, just log it
-            console.log('No speech detected, trying again...');
-          } else {
-            alert(`Voice recognition error: ${error}`);
+      try {
+        // Request microphone permission for all devices (not just iOS)
+        const stream = await navigator.mediaDevices.getUserMedia({ 
+          audio: {
+            echoCancellation: true,
+            noiseSuppression: true,
+            autoGainControl: true
+          } 
+        });
+        
+        // Stop the test stream immediately
+        stream.getTracks().forEach(track => track.stop());
+        console.log('Microphone permission granted');
+        
+        // Start speech recognition after permission is granted
+        audioService.current.startListening(
+          handleVoiceInput,
+          (error) => {
+            console.error('Voice recognition error:', error);
+            setChatState(prev => ({ ...prev, isListening: false }));
+            
+            // Show user-friendly error message
+            if (error.includes('denied') || error.includes('not-allowed')) {
+              alert('Microphone access denied. Please allow microphone access in your browser settings and try again.');
+            } else if (error.includes('no-speech')) {
+              // Don't show alert for no-speech, just log it
+              console.log('No speech detected, trying again...');
+            } else if (error.includes('service not allowed')) {
+              alert('Speech recognition service not available. Please try refreshing the page or use a different browser.');
+            } else {
+              alert(`Voice recognition error: ${error}`);
+            }
           }
-        }
-      );
-      setChatState(prev => ({ ...prev, isListening: true }));
+        );
+        setChatState(prev => ({ ...prev, isListening: true }));
+        
+      } catch (error) {
+        console.error('Microphone permission error:', error);
+        alert('Please allow microphone access in your browser settings to use voice input.');
+      }
     }
   };
 
