@@ -172,15 +172,40 @@ const Chat: React.FC<ChatProps> = ({ isDarkMode, onToggleDarkMode }) => {
     }
   };
 
-  // Toggle voice listening
-  const toggleVoiceListening = () => {
+  // Toggle voice listening with iPhone/iOS compatibility
+  const toggleVoiceListening = async () => {
     if (chatState.isListening) {
       audioService.current.stopListening();
       setChatState(prev => ({ ...prev, isListening: false }));
     } else {
+      // Request microphone permission on iOS
+      if (navigator.userAgent.includes('iPhone') || navigator.userAgent.includes('iPad')) {
+        try {
+          // Request microphone permission explicitly
+          const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+          stream.getTracks().forEach(track => track.stop()); // Stop the stream immediately
+          console.log('Microphone permission granted on iOS');
+        } catch (error) {
+          console.error('Microphone permission denied:', error);
+          alert('Please allow microphone access in your browser settings to use voice input.');
+          return;
+        }
+      }
+      
       audioService.current.startListening(
         handleVoiceInput,
-        (error) => console.error('Voice recognition error:', error)
+        (error) => {
+          console.error('Voice recognition error:', error);
+          // Show user-friendly error message
+          if (error.includes('denied')) {
+            alert('Microphone access denied. Please allow microphone access in your browser settings.');
+          } else if (error.includes('no-speech')) {
+            // Don't show alert for no-speech, just log it
+            console.log('No speech detected, trying again...');
+          } else {
+            alert(`Voice recognition error: ${error}`);
+          }
+        }
       );
       setChatState(prev => ({ ...prev, isListening: true }));
     }

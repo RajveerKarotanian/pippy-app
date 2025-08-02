@@ -48,13 +48,28 @@ export class AudioService {
       }
     }
 
-    // Initialize speech recognition
+      // Initialize speech recognition with iPhone/iOS compatibility
     if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
       const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
       this.speechRecognition = new SpeechRecognition();
+      
+      // iPhone/iOS specific settings
       this.speechRecognition.continuous = false;
       this.speechRecognition.interimResults = false;
       this.speechRecognition.lang = 'en-US';
+      
+      // iOS Safari specific settings
+      if (navigator.userAgent.includes('iPhone') || navigator.userAgent.includes('iPad')) {
+        this.speechRecognition.maxAlternatives = 1;
+        // Ensure proper audio context for iOS
+        if (this.audioContext && this.audioContext.state === 'suspended') {
+          this.audioContext.resume();
+        }
+      }
+      
+      console.log('Speech recognition initialized for:', navigator.userAgent);
+    } else {
+      console.warn('Speech recognition not supported in this browser');
     }
   }
 
@@ -297,33 +312,69 @@ export class AudioService {
     }
   }
 
-  // Speech recognition (Speech-to-Text)
+  // Speech recognition (Speech-to-Text) with iPhone/iOS compatibility
   public startListening(onResult: (transcript: string) => void, onError?: (error: string) => void): void {
     if (!this.speechRecognition) {
       if (onError) onError('Speech recognition not supported');
       return;
     }
 
+    // Ensure audio context is resumed for iOS
+    if (this.audioContext && this.audioContext.state === 'suspended') {
+      this.audioContext.resume().then(() => {
+        console.log('Audio context resumed for iOS');
+      }).catch(error => {
+        console.error('Failed to resume audio context:', error);
+      });
+    }
+
     try {
       this.speechRecognition.onresult = (event: any) => {
-        const transcript = event.results[0][0].transcript;
-        onResult(transcript);
+        if (event.results && event.results.length > 0) {
+          const transcript = event.results[0][0].transcript;
+          console.log('Speech recognition result:', transcript);
+          onResult(transcript);
+        }
       };
 
       this.speechRecognition.onerror = (event: any) => {
         console.error('Speech recognition error:', event.error);
-        if (onError) onError(event.error);
+        
+        // Handle specific iOS errors
+        if (event.error === 'not-allowed') {
+          if (onError) onError('Microphone access denied. Please allow microphone access in your browser settings.');
+        } else if (event.error === 'no-speech') {
+          // Don't show error for no-speech, just log it silently
+          console.log('No speech detected, continuing...');
+        } else if (event.error === 'audio-capture') {
+          if (onError) onError('Audio capture failed. Please check your microphone and try again.');
+        } else {
+          if (onError) onError(`Speech recognition error: ${event.error}`);
+        }
+      };
+
+      this.speechRecognition.onstart = () => {
+        console.log('Speech recognition started');
       };
 
       this.speechRecognition.onend = () => {
-        // Restart listening for continuous interaction
-        this.speechRecognition.start();
+        console.log('Speech recognition ended');
+        // Don't auto-restart on iOS to prevent issues
+        if (!navigator.userAgent.includes('iPhone') && !navigator.userAgent.includes('iPad')) {
+          // Only auto-restart on non-iOS devices
+          setTimeout(() => {
+            if (this.speechRecognition) {
+              this.speechRecognition.start();
+            }
+          }, 100);
+        }
       };
 
       this.speechRecognition.start();
+      console.log('Speech recognition started for device:', navigator.userAgent);
     } catch (error) {
       console.error('Error starting speech recognition:', error);
-      if (onError) onError('Failed to start speech recognition');
+      if (onError) onError('Failed to start speech recognition. Please check microphone permissions.');
     }
   }
 

@@ -11,7 +11,7 @@ export class AIService {
   // Updated to use better free models
   private apiUrl = 'https://api-inference.huggingface.co/models/microsoft/DialoGPT-large';
   private alternativeApiUrl = 'https://api-inference.huggingface.co/models/microsoft/DialoGPT-medium';
-  private apiKey = ''; // Free tier doesn't require API key for basic usage
+  private apiKey = process.env.REACT_APP_HUGGING_FACE_API_KEY || ''; // Get API key from environment variables
   private conversationContext: string[] = []; // Track conversation context
   
   // Comprehensive symptom trigger list for schizophrenia-related phrases

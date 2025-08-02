@@ -1,229 +1,119 @@
-# Pippy - Schizophrenia Companion Chatbot (PWA)
+# Pippy - Your Friendly Penguin Companion 🐧
 
-Pippy is a Progressive Web Application (PWA) designed to provide empathetic support for individuals experiencing schizophrenia symptoms. It features a friendly penguin companion chatbot that offers grounding techniques, distraction games, and emotional support.
+A therapeutic chatbot companion designed to help with mental health support, featuring voice interaction and grounding techniques.
 
 ## Features
 
-### 🤖 Chatbot Functionality
-- **Episode Detection**: Initial prompt to assess if user is experiencing an episode
-- **Grounding Techniques**: 5-4-3-2-1 technique, breathing exercises, body scans
-- **Distraction Games**: Color hunts, animal alphabet, counting challenges
-- **Fallback Logic**: Works offline with preloaded responses
-
-### 🎤 Voice Interaction
-- **Text-to-Speech**: Pippy speaks responses using browser-native APIs
-- **Speech Recognition**: Voice input for hands-free interaction
-- **Natural Conversation**: Seamless voice-based chat experience
-
-### 🌧️ Audio Features
-- **Rain Sounds**: Ambient rain sound generator for calming effect
-- **Volume Control**: Adjustable audio levels
-- **Audio Context**: Browser-native audio processing
-
-### 📱 PWA Features
-- **Offline Support**: Service worker caching for offline functionality
-- **Installable**: Add to home screen on mobile devices
-- **Responsive Design**: Mobile-first, desktop-accessible
-
-### 🎨 User Interface
-- **Calming Design**: Soft colors and smooth animations
+- **Voice Interaction**: Speak with Pippy using your microphone (works on iPhone Safari!)
+- **Text Chat**: Type messages for text-based interaction
+- **Grounding Techniques**: Access various therapeutic exercises
+- **Distraction Games**: Fun activities to help with anxiety
 - **Dark/Light Mode**: Toggle between themes
-- **Animated Pippy**: Cute penguin character with speaking/listening animations
-- **Mobile Optimized**: Touch-friendly interface
+- **Mobile Optimized**: Works perfectly on iPhone, iPad, and Android devices
 
-## Tech Stack
+## Setup
 
-### Frontend
-- **React 18** with TypeScript
-- **CSS3** with animations and responsive design
-- **Web Speech API** for voice features
-- **Web Audio API** for rain sounds
-- **Service Workers** for PWA functionality
-
-### Backend
-- **Node.js** with Express
-- **Rate Limiting** for API protection
-- **CORS** configuration
-- **Helmet** for security headers
-
-### Offline Features
-- **Preloaded Logic**: Grounding techniques and games stored locally
-- **Fallback Responses**: Works without internet connection
-- **Service Worker Caching**: Static assets cached for offline use
-
-## Installation & Setup
-
-### Prerequisites
-- Node.js (v14 or higher)
-- npm or yarn
-
-### Frontend Setup
+### 1. Install Dependencies
 ```bash
-# Navigate to project directory
-cd pippy-app
-
-# Install dependencies
 npm install
+```
 
-# Start development server
+### 2. Environment Variables (Optional)
+Create a `.env` file in the root directory for enhanced AI features:
+
+```env
+# API Keys for enhanced features (optional)
+REACT_APP_HUGGING_FACE_API_KEY=your_hugging_face_api_key_here
+REACT_APP_OPENAI_API_KEY=your_openai_api_key_here
+```
+
+**Note**: The app works without API keys using built-in responses, but adding keys enables enhanced AI features.
+
+### 3. Start Development Server
+```bash
 npm start
 ```
 
-### Backend Setup
-```bash
-# Navigate to server directory
-cd server
+The app will be available at `http://localhost:3000`
 
-# Install dependencies
-npm install
+## Mobile Compatibility
 
-# Start server
-npm start
-```
+### iPhone/iPad (Safari)
+- ✅ **Voice Input**: Works perfectly with microphone
+- ✅ **No Zoom**: Fixed viewport prevents zooming when typing
+- ✅ **Touch Optimized**: Proper touch targets and gestures
+- ✅ **Full Screen**: Optimized for mobile viewing
 
-### Production Build
-```bash
-# Build the React app
-npm run build
+### Android
+- ✅ **Voice Input**: Works with Chrome and other browsers
+- ✅ **Responsive Design**: Adapts to different screen sizes
+- ✅ **Touch Friendly**: Optimized for touch interactions
 
-# Serve the built files
-npm install -g serve
-serve -s build
-```
+## Voice Input Setup
 
-## Usage
+### iPhone Safari
+1. Open the app in Safari
+2. Tap the microphone button 🎤
+3. Allow microphone access when prompted
+4. Start speaking!
 
-### Getting Started
-1. Open the application in your browser
-2. Pippy will greet you and ask if you're experiencing an episode
-3. Respond with "yes" or "no" to guide the conversation
-4. Use voice input by clicking the microphone button
-5. Toggle rain sounds for ambient relief
+### Troubleshooting Voice Input
+- **Permission Denied**: Go to Settings > Safari > Microphone > Allow
+- **Not Working**: Try refreshing the page and allowing permissions again
+- **No Sound**: Check your device's microphone settings
 
-### Voice Commands
-- Click the microphone button to start voice input
-- Speak naturally to Pippy
-- The app will transcribe your speech and respond
-- Pippy will speak responses back to you
+## Deployment
 
-### Grounding Techniques
-- **5-4-3-2-1**: Sensory grounding exercise
-- **Deep Breathing**: Calming breath work
-- **Body Scan**: Progressive muscle relaxation
+### Vercel (Recommended)
+1. Push your code to GitHub
+2. Connect your repo to Vercel
+3. Deploy automatically
 
-### Distraction Games
-- **Color Hunt**: Find objects by color
-- **Animal Alphabet**: Name animals A-Z
-- **Counting Challenge**: Count objects in your environment
+### Netlify
+1. Push your code to GitHub
+2. Connect your repo to Netlify
+3. Deploy automatically
 
-## PWA Installation
+## API Keys (Optional)
 
-### Mobile (iOS)
-1. Open Safari and navigate to the app
-2. Tap the Share button
-3. Select "Add to Home Screen"
-4. Tap "Add"
+### Hugging Face API Key
+1. Go to [Hugging Face](https://huggingface.co/settings/tokens)
+2. Create a new token
+3. Add to your `.env` file as `REACT_APP_HUGGING_FACE_API_KEY`
 
-### Mobile (Android)
-1. Open Chrome and navigate to the app
-2. Tap the menu button
-3. Select "Add to Home screen"
-4. Tap "Add"
+### OpenAI API Key
+1. Go to [OpenAI Platform](https://platform.openai.com/api-keys)
+2. Create a new API key
+3. Add to your `.env` file as `REACT_APP_OPENAI_API_KEY`
 
-### Desktop
-1. Open Chrome and navigate to the app
-2. Click the install icon in the address bar
-3. Click "Install"
+## Security
 
-## Privacy & Security
-
-### Data Protection
-- No user data is stored or logged
-- All conversations are processed locally when possible
-- No personal information is collected
-- Service worker caches only static assets
-
-### Security Features
-- Rate limiting on API endpoints
-- CORS protection
-- Security headers with Helmet
-- Input validation and sanitization
+- API keys are stored in environment variables
+- `.env` file is ignored by Git
+- No sensitive data is stored in the browser
 
 ## Browser Support
 
-### Required Features
-- **Service Workers**: For PWA functionality
-- **Web Speech API**: For voice features
-- **Web Audio API**: For rain sounds
-- **CSS Grid/Flexbox**: For responsive layout
+- ✅ Chrome (Desktop & Mobile)
+- ✅ Safari (iPhone/iPad)
+- ✅ Firefox (Desktop & Mobile)
+- ✅ Edge (Desktop & Mobile)
 
-### Supported Browsers
-- Chrome 70+
-- Firefox 65+
-- Safari 12+
-- Edge 79+
+## Voice Recognition Support
 
-## Development
-
-### Project Structure
-```
-pippy-app/
-├── public/
-│   ├── manifest.json
-│   ├── sw.js
-│   └── index.html
-├── src/
-│   ├── components/
-│   │   ├── Chat.tsx
-│   │   ├── ChatInput.tsx
-│   │   ├── MessageBubble.tsx
-│   │   └── PippyAvatar.tsx
-│   ├── services/
-│   │   ├── chatbotService.ts
-│   │   └── audioService.ts
-│   ├── types/
-│   │   └── index.ts
-│   └── App.tsx
-├── server/
-│   ├── server.js
-│   └── package.json
-└── README.md
-```
-
-### Adding New Features
-1. Create new components in `src/components/`
-2. Add TypeScript types in `src/types/`
-3. Implement services in `src/services/`
-4. Update CSS files for styling
-5. Test on multiple devices and browsers
+- ✅ **Chrome**: Full support
+- ✅ **Safari (iOS)**: Full support
+- ✅ **Firefox**: Full support
+- ✅ **Edge**: Full support
 
 ## Contributing
 
-### Guidelines
-- Follow TypeScript best practices
-- Use functional components with hooks
-- Maintain accessibility standards
-- Test voice features thoroughly
-- Ensure offline functionality
-
-### Testing
-- Test on mobile devices
-- Verify PWA installation
-- Check voice recognition accuracy
-- Test offline scenarios
-- Validate accessibility
+Feel free to contribute to this project by:
+- Reporting bugs
+- Suggesting new features
+- Improving the code
+- Adding new therapeutic techniques
 
 ## License
 
-MIT License - see LICENSE file for details.
-
-## Support
-
-This application is designed for mental health support but is not a substitute for professional medical care. If you're experiencing a mental health crisis, please contact emergency services or a mental health professional.
-
-## Acknowledgments
-
-- Built with React and TypeScript
-- Voice features powered by Web Speech API
-- PWA functionality using Service Workers
-- Designed for accessibility and inclusivity
+This project is open source and available under the MIT License.
